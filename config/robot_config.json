@@ -1,0 +1,16 @@
+{
+  "dictionary": "DICT_4X4_50",
+  "marker_id": 0,
+  "marker_size_cm": 9.0,
+  "mounting_height_cm": 16.6,
+  "marker_offset_forward_cm": 2.0,
+  "marker_offset_left_cm": 1.0,
+  "marker_to_robot_heading_deg": 0.0,
+  "robot_id": 0,
+  "missed_frame_expiration": 5,
+  "max_observation_age_seconds": 0.5,
+  "smoothing_alpha": 1.0,
+  "exclusion_padding_pixels": 80,
+  "body_length_cm": 26.0,
+  "body_width_cm": 15.2
+}

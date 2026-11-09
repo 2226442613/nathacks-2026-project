@@ -1,0 +1,208 @@
+--- /dev/null
++++ b/CommunicationSafety.cpp
+@@ -0,0 +1,45 @@
++#include "CommunicationSafety.h"
++#include "Cleaner.h"
++#include "Protocol.h"
++
++static bool emergencyLatched = false;
++static bool watchdogArmed = false;
++static bool watchdogExpired = false;
++static unsigned long lastCommunication = 0;
++
++void communicationSeen() {
++  lastCommunication = millis(); watchdogArmed = true; watchdogExpired = false;
++}
++void communicationNewClient() { cleanerAbort(); communicationSeen(); }
++void communicationLinkLost() { cleanerAbort(); watchdogArmed = false; watchdogExpired = true; }
++void communicationEmergencyStop() { emergencyLatched = true; cleanerAbort(); communicationSeen(); }
++void communicationResetEmergencyStop() {
++  cleanerAbort(); emergencyLatched = false; communicationSeen(); // Never resume old motion/task.
++}
++bool communicationEstopped() { return emergencyLatched; }
++void communicationUpdate() {
++  if (watchdogArmed && millis() - lastCommunication > COMMUNICATION_WATCHDOG_MS) {
++    cleanerAbort(); watchdogArmed = false; watchdogExpired = true;
++    sendReply("EVENT,WATCHDOG_STOP");
++  }
++}
++void reportSafety() {
++  sendReply(String("SAFETY,ESTOP=") + (emergencyLatched ? "1" : "0") +
++            ",WATCHDOG_MS=1000,WATCHDOG=" + (watchdogExpired ? "EXPIRED" : "OK"));
++}
++void receiveCommandByte(char c, String &line, bool &discard) {
++  if (c == '\n') {
++    if (!discard) { line.trim(); if (line.length()) processCommand(line); }
++    line = ""; discard = false; return;
++  }
++  if (discard) return;
++  bool afterCR = line.length() && line.charAt(line.length()-1) == '\r';
++  if (c == '\r' && !afterCR) { line += c; return; } // Only valid immediately before LF.
++  if (afterCR || (unsigned char)c < 32 || (unsigned char)c > 126 || line.length() >= 120) {
++    line = ""; discard = true;
++    cleanerAbort(); // Protocol faults never leave actuators running.
++    sendReply(afterCR || (unsigned char)c < 32 || (unsigned char)c > 126 ? "ERR,ENCODING" : "ERR,LINE_TOO_LONG");
++    return;
++  }
++  line += c;
++}
+--- /dev/null
++++ b/CommunicationSafety.h
+@@ -0,0 +1,12 @@
++#pragma once
++#include <Arduino.h>
++constexpr unsigned long COMMUNICATION_WATCHDOG_MS = 1000UL;
++void communicationSeen();
++void communicationUpdate();
++void communicationNewClient();
++void communicationLinkLost();
++void communicationEmergencyStop();
++void communicationResetEmergencyStop();
++bool communicationEstopped();
++void reportSafety();
++void receiveCommandByte(char c, String &line, bool &discard);
+--- a/NatHack_Robot.ino
++++ b/NatHack_Robot.ino
+@@ -5,10 +5,12 @@
+ #include "Actuators.h"
+ #include "Cleaner.h"
+ #include "Protocol.h"
++#include "CommunicationSafety.h"
+ 
+ WiFiServer robotServer(NET_PORT);
+ WiFiClient pcClient;
+ String receiveLine;
++bool wifiDiscard = false;
+ unsigned long lastWifiAttempt = 0;
+ 
+ void setup() {
+@@ -26,6 +28,7 @@
+ }
+ 
+ void loop() {
++  communicationUpdate();
+   if (WiFi.status() != WL_CONNECTED) {
+     if (millis() - lastWifiAttempt > 10000UL) {
+       lastWifiAttempt = millis();
+@@ -42,49 +45,42 @@
+   static bool hadClient = false;
+   bool clientAlive = pcClient && pcClient.connected();
+   if (hadClient && !clientAlive) {
+-    cleanerAbort(); // Lost link: stop motors AND pumps and return servos home.
++    communicationLinkLost(); // Preserve existing abort/home behavior, including pumps.
+     Serial.println("EVENT,LINK_LOST_ABORTED");
+   }
+   hadClient = clientAlive;
+   if (!clientAlive) {
+     if (pcClient) pcClient.stop();
+     receiveLine = "";
++    wifiDiscard = false;
+     if (connected) {
+       WiFiClient candidate = robotServer.available();
+       if (candidate) {
+         pcClient = candidate;
+         hadClient = true;
+         pcClient.setNoDelay(true);
++        communicationNewClient();
+         sendReply("CONNECTED,NATHACK_V1");
+         reportStatus();
+       }
+     }
+   }
+   if (pcClient && pcClient.connected()) {
+-    // Upper limit prevents unbounded RAM consumption from bad input.
++    // Bounded readers discard an ENTIRE bad/oversized line, never execute its tail.
++
+     unsigned int byteBudget = 256;
+     while (pcClient.available() && byteBudget--) {
+-      char c = (char)pcClient.read();
+-      if (c == '\n') {
+-        receiveLine.trim();
+-        if (receiveLine.length()) processCommand(receiveLine);
+-        receiveLine = "";
+-      } else if (c != '\r') {
+-        if (receiveLine.length() < 120) receiveLine += c;
+-        else receiveLine = "";
+-      }
++      receiveCommandByte((char)pcClient.read(), receiveLine, wifiDiscard);
+     }
++    if (!pcClient.connected()) wifiDiscard = false;
+   }
+-  // Serial Monitor can issue the same commands during bench testing.
+   static String serialLine;
+-  while (Serial.available()) {
+-    char c = (char)Serial.read();
+-    if (c == '\n') {
+-      serialLine.trim();
+-      if (serialLine.length()) processCommand(serialLine);
+-      serialLine = "";
+-    } else if (c != '\r' && serialLine.length() < 120) serialLine += c;
++  static bool serialDiscard = false;
++  unsigned int serialBudget = 256;
++  while (Serial.available() && serialBudget--) {
++    receiveCommandByte((char)Serial.read(), serialLine, serialDiscard);
+   }
++  communicationUpdate();
+   motorsUpdate();
+   cleanerUpdate();
+ }
+--- a/Protocol.cpp
++++ b/Protocol.cpp
+@@ -1,6 +1,7 @@
+ #include "Protocol.h"
+ #include "Cleaner.h"
+ #include "MotorControl.h"
++#include "CommunicationSafety.h"
+ #include <WiFi.h>
+ extern WiFiClient pcClient;
+ 
+@@ -13,11 +14,17 @@
+ 
+ void processCommand(String message) {
+   message.trim(); message.toUpperCase();
++  if (message == "CAPS") { communicationSeen(); sendReply("CAPS,NATHACK_V1_1,MOVE_PWM_0_255,STOP,ESTOP,RESET_ESTOP,HEARTBEAT,SAFETY,TARGET,ARRIVED"); return; }
++  if (message == "SAFETY") { communicationSeen(); reportSafety(); return; }
++  if (message == "HEARTBEAT") { communicationSeen(); sendReply("OK,HEARTBEAT"); return; }
++  if (message == "ESTOP") { communicationEmergencyStop(); sendReply("OK,ESTOP"); return; }
++  if (message == "RESET_ESTOP") { communicationResetEmergencyStop(); sendReply("OK,RESET_ESTOP"); return; }
+   if (message == "STOP" || message == "ABORT") {
+-    cleanerAbort(); sendReply("OK,STOP"); return;
++    communicationSeen(); cleanerAbort(); sendReply("OK,STOP"); return;
+   }
+-  if (message == "STATUS") { reportStatus(); return; }
+-  if (message == "PING") { sendReply("PONG"); return; }
++  if (message == "STATUS") { communicationSeen(); reportStatus(); return; }
++  if (message == "PING") { communicationSeen(); sendReply("PONG"); return; }
++  if (communicationEstopped()) { sendReply("ERR,ESTOP_LATCHED"); return; }
+ 
+   if (message.startsWith("TARGET,")) {
+     int comma = message.indexOf(',', 7);
+@@ -33,10 +40,12 @@
+     if (surface == Surface::NONE || fluid == Fluid::NONE) {
+       sendReply("ERR,UNKNOWN_TARGET"); return;
+     }
++    communicationSeen();
+     sendReply(cleanerSetTarget(surface, fluid) ? "OK,TARGET" : "ERR,BUSY");
+     return;
+   }
+   if (message == "ARRIVED") {
++    communicationSeen();
+     sendReply(cleanerStart() ? "OK,ARRIVED" : "ERR,NO_TARGET");
+     return;
+   }
+@@ -55,8 +64,14 @@
+     for (unsigned int i = 0; i < speedText.length(); i++) {
+       if (!isDigit(speedText[i])) { sendReply("ERR,SPEED"); return; }
+     }
+-    long speed = speedText.toInt();
++    // Accumulate with an upper bound; String.toInt overflow must not wrap to a valid PWM.
++    long speed = 0;
++    for (unsigned int i = 0; i < speedText.length(); i++) {
++      speed = speed * 10 + (speedText[i] - '0');
++      if (speed > 255) { sendReply("ERR,SPEED_RANGE"); return; }
++    }
+     if (speed < 0 || speed > 255) { sendReply("ERR,SPEED_RANGE"); return; }
++    communicationSeen();
+     motorsDrive(dir, (int)speed, true);
+     sendReply("OK,MOVE");
+     return;

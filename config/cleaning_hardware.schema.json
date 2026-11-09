@@ -1,0 +1,484 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hospital-guardian:cleaning-hardware:1",
+  "title": "Cleaning geometry v1; null stays unconfigured",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "geometry_source",
+    "measurements_validated",
+    "body",
+    "floor_sponge",
+    "floor_nozzle",
+    "wall_sponge",
+    "wall_nozzle",
+    "planning"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "geometry_source": {
+      "enum": [
+        "SIMULATION",
+        "PHYSICAL"
+      ]
+    },
+    "measurements_validated": {
+      "type": "boolean"
+    },
+    "body": {
+      "type": "object",
+      "required": [
+        "chassis_length_cm",
+        "chassis_width_cm",
+        "safety_margin_cm",
+        "position_uncertainty_cm",
+        "reference_point",
+        "axes"
+      ],
+      "properties": {
+        "chassis_length_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "chassis_width_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "safety_margin_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "position_uncertainty_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "reference_point": {
+          "const": "GROUND_CENTER"
+        },
+        "axes": {
+          "const": "FORWARD_LEFT"
+        }
+      }
+    },
+    "floor_sponge": {
+      "type": "object",
+      "required": [
+        "offset_forward_cm",
+        "offset_lateral_cm",
+        "contact_length_cm",
+        "contact_width_cm",
+        "installed"
+      ],
+      "properties": {
+        "offset_forward_cm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "offset_lateral_cm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "contact_length_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "contact_width_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "installed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "floor_nozzle": {
+      "type": "object",
+      "required": [
+        "mount_offset_forward_cm",
+        "mount_offset_lateral_cm",
+        "mount_height_cm",
+        "fixed_spray_azimuth_deg",
+        "fixed_spray_elevation_deg",
+        "offset_forward_cm",
+        "offset_lateral_cm",
+        "coverage_length_cm",
+        "coverage_width_cm",
+        "fixed_orientation_deg",
+        "installed",
+        "coverage_calibrated"
+      ],
+      "properties": {
+        "mount_offset_forward_cm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "mount_offset_lateral_cm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "mount_height_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "fixed_spray_azimuth_deg": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "fixed_spray_elevation_deg": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "offset_forward_cm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "offset_lateral_cm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "coverage_length_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "coverage_width_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "fixed_orientation_deg": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "installed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "coverage_calibrated": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "wall_sponge": {
+      "type": "object",
+      "required": [
+        "offset_forward_cm",
+        "diameter_cm",
+        "contact_width_cm",
+        "min_contact_height_cm",
+        "max_contact_height_cm",
+        "lateral_protrusion_cm",
+        "required_wall_clearance_cm",
+        "contact_compression_cm",
+        "installed",
+        "side"
+      ],
+      "properties": {
+        "offset_forward_cm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "diameter_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "contact_width_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "min_contact_height_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "max_contact_height_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "lateral_protrusion_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "required_wall_clearance_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "contact_compression_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "installed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "side": {
+          "enum": [
+            "LEFT",
+            "RIGHT",
+            null
+          ]
+        },
+        "measurements": {
+          "type": "object",
+          "description": "Observed side-panel dimensions, separate from effective contact geometry or a verified rotating envelope.",
+          "required": ["dimensions_cm", "front_edge_setback_cm", "lowest_edge_height_cm", "rotation_about_center", "rotation_axis", "effective_contact_verified", "rotation_envelope_verified"],
+          "properties": {
+            "dimensions_cm": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number", "exclusiveMinimum": 0}},
+            "front_edge_setback_cm": {"type": "number", "minimum": 0},
+            "lowest_edge_height_cm": {"type": "number", "minimum": 0},
+            "rotation_about_center": {"type": "boolean"},
+            "rotation_axis": {"type": ["string", "null"]},
+            "effective_contact_verified": {"type": "boolean"},
+            "rotation_envelope_verified": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "wall_nozzle": {
+      "type": "object",
+      "required": [
+        "mount_height_cm",
+        "mount_offset_forward_cm",
+        "mount_offset_lateral_cm",
+        "impact_offset_forward_cm",
+        "lift_min_cm",
+        "lift_max_cm",
+        "rotation_min_deg",
+        "rotation_max_deg",
+        "impact_min_height_cm",
+        "impact_max_height_cm",
+        "coverage_width_cm",
+        "safe_distance_min_cm",
+        "safe_distance_max_cm",
+        "installed",
+        "coverage_calibrated",
+        "orientation_convention"
+      ],
+      "properties": {
+        "mount_height_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "mount_offset_forward_cm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "mount_offset_lateral_cm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "impact_offset_forward_cm": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "lift_min_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "lift_max_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "rotation_min_deg": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "rotation_max_deg": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "impact_min_height_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "impact_max_height_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "coverage_width_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "safe_distance_min_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "safe_distance_max_cm": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "installed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "coverage_calibrated": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "orientation_convention": {
+          "enum": [
+            "TOWARD_WALL",
+            null
+          ]
+        }
+      }
+    },
+    "nozzle_observation": {
+      "type": "object",
+      "description": "A physical observation is not a calibrated surface-specific coverage rectangle or exact mount/impact offset.",
+      "required": ["height_cm", "landing_ahead_cm", "landing_reference", "approximate"],
+      "properties": {
+        "height_cm": {"type": "number", "minimum": 0},
+        "landing_ahead_cm": {"type": "number", "minimum": 0},
+        "landing_reference": {"type": "string"},
+        "approximate": {"type": "boolean"}
+      }
+    },
+    "planning": {
+      "type": "object",
+      "required": [
+        "pass_overlap_fraction",
+        "lead_in_cm",
+        "retreat_cm",
+        "max_strokes"
+      ],
+      "properties": {
+        "pass_overlap_fraction": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 0.8
+        },
+        "lead_in_cm": {
+          "type": "number",
+          "minimum": 0
+        },
+        "retreat_cm": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_strokes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 512
+        }
+      }
+    }
+  },
+  "$comment": "CleaningHardware also validates interval ordering, context and angular limits. No simulation values may fill a physical template."
+}

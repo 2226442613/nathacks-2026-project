@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "mode": "PHYSICAL",
+  "samples": [],
+  "operator_estimates": [
+    {"direction": "F", "duration_ms": 1000, "change_magnitude": 16.0, "units": "cm", "verified": true, "approximate": true, "reported_speed_cm_s": 16.0, "source": "Operator real-world measurement; 1-second reference normalized from reported speed, not an invented test trial"},
+    {"direction": "B", "duration_ms": 1000, "change_magnitude": 18.5, "units": "cm", "verified": true, "approximate": true, "reported_speed_cm_s": 18.5, "source": "Operator real-world measurement; 1-second reference normalized from reported speed, not an invented test trial"},
+    {"direction": "L", "duration_ms": 4000, "change_magnitude": 90.0, "units": "deg", "verified": true, "approximate": true, "heading_sign_verified": true, "heading_sign": -1, "source": "Operator real-world left/counterclockwise turn; latest physical observation confirms Module04 theta decreases"},
+    {"direction": "R", "duration_ms": 3000, "change_magnitude": 90.0, "units": "deg", "verified": true, "approximate": true, "heading_sign_verified": true, "heading_sign": 1, "source": "Operator real-world right/clockwise turn; latest physical observation confirms Module04 theta increases"}
+  ],
+  "references": [
+    {"direction": "R", "duration_ms": 1500, "approximate_angle_magnitude_deg": 90, "source": "earlier operator report; preserved, not silently replaced", "verified": false},
+    {"direction": "R", "duration_ms": 3000, "approximate_angle_magnitude_deg": 90, "source": "latest operator report; direction explicitly confirmed R; signed Module04 heading change still needed", "verified": false}
+  ]
+}

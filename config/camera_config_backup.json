@@ -1,0 +1,120 @@
+{
+  "calibration_version": 2,
+  "camera": {
+    "source": 0,
+    "frame_width": 1280,
+    "frame_height": 720,
+    "requested_fps": 30.0
+  },
+  "floor": {
+    "width_cm": 121.8,
+    "depth_cm": 66.5,
+    "corners_pixels": [
+      [
+        264.0,
+        238.0
+      ],
+      [
+        968.0,
+        238.0
+      ],
+      [
+        1054.0,
+        530.0
+      ],
+      [
+        157.0,
+        523.0
+      ]
+    ],
+    "homography": [
+      [
+        0.23084924282939998,
+        0.08666971572893259,
+        -81.57159245044754
+      ],
+      [
+        -2.959645626826654e-18,
+        0.38831391292983847,
+        -92.41871127730154
+      ],
+      [
+        3.574175568681324e-05,
+        0.0012592562683407123,
+        1.0
+      ]
+    ]
+  },
+  "wall": {
+    "width_cm": 121.8,
+    "height_cm": 31.5,
+    "corners_pixels": [
+      [
+        227.0,
+        73.0
+      ],
+      [
+        995.0,
+        74.0
+      ],
+      [
+        968.0,
+        238.0
+      ],
+      [
+        264.0,
+        238.0
+      ]
+    ],
+    "homography": [
+      [
+        0.15183606138018096,
+        -0.034048086491313294,
+        -31.981275619435205
+      ],
+      [
+        8.463968638189351e-18,
+        -0.183835225131365,
+        43.752783581264865
+      ],
+      [
+        -6.9662993453816275e-06,
+        -0.00048592099580588256,
+        1.0
+      ]
+    ]
+  },
+  "shared_geometry": {
+    "floor_boundary": "top",
+    "wall_x_reversed": false
+  },
+  "quality": {
+    "quality_version": 1,
+    "thresholds": {
+      "shared_edge_warning_px": 3.0,
+      "physical_good_cm": 2.0,
+      "physical_warning_cm": 5.0
+    },
+    "shared_boundary": {
+      "sample_errors_px": [
+        0.0,
+        3.2376589870676753,
+        4.331381202552279,
+        3.259529062266779,
+        1.8271809949510517e-06
+      ],
+      "max_error_px": 4.331381202552279,
+      "rms_error_px": 2.823750291584877
+    },
+    "physical_validation": {
+      "status": "NOT_ASSESSED",
+      "points": [],
+      "max_error_cm": null,
+      "rms_error_cm": null
+    },
+    "warnings": [
+      "Shared-boundary inconsistency: max 4.331 px, warning threshold 3 px. Independent homographies disagree along the edge; recheck corner selections."
+    ],
+    "accepted_warnings": true
+  }
+}

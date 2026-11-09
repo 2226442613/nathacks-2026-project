@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hospital-guardian:cleaning-plan:1",
+  "title": "Declarative contact coverage only; no actuator authorization",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "message_type",
+    "target_id",
+    "surface",
+    "geometry_source",
+    "reachability",
+    "geometric_reachability",
+    "timestamp",
+    "calibration_id",
+    "configuration_id",
+    "localization_status",
+    "localization_trust",
+    "coordinate_frame",
+    "approach_pose",
+    "coverage_segments",
+    "metrics",
+    "reasons",
+    "warnings",
+    "execution_authorization",
+    "physical_execution_authorization",
+    "actionable",
+    "route_to_approach_validated"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "message_type": {
+      "const": "CLEANING_PLAN"
+    },
+    "target_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "surface": {
+      "enum": [
+        "FLOOR",
+        "WALL",
+        "BOUNDARY",
+        "UNKNOWN"
+      ]
+    },
+    "geometry_source": {
+      "enum": [
+        "SIMULATION",
+        "PHYSICAL"
+      ]
+    },
+    "reachability": {
+      "enum": [
+        "FULLY_REACHABLE",
+        "PARTIALLY_REACHABLE",
+        "UNREACHABLE",
+        "UNKNOWN"
+      ]
+    },
+    "configuration_status": {
+      "enum": ["NOT_EVALUATED", "CONFIGURATION_REQUIRED", "CONFIGURED"]
+    },
+    "geometric_reachability": {
+      "enum": [
+        "FULLY_REACHABLE",
+        "PARTIALLY_REACHABLE",
+        "UNREACHABLE",
+        "UNKNOWN"
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "calibration_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "configuration_id": {
+      "type": "string"
+    },
+    "localization_status": {
+      "enum": [
+        "UNVERIFIED",
+        "VERIFIED"
+      ]
+    },
+    "localization_trust": {
+      "type": "object"
+    },
+    "coordinate_frame": {
+      "type": "object"
+    },
+    "approach_pose": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "coverage_segments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "segment_type",
+          "required_tool",
+          "waypoints",
+          "coverage_metadata",
+          "prerequisites",
+          "declarative_only"
+        ],
+        "properties": {
+          "segment_type": {
+            "enum": [
+              "APPROACH",
+              "ALIGN",
+              "SPRAY",
+              "CONTACT_CLEAN",
+              "RETREAT",
+              "REQUEST_VERIFICATION"
+            ]
+          },
+          "required_tool": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "start_pose": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "end_pose": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "waypoints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "x_cm",
+                "y_cm",
+                "heading_deg"
+              ]
+            }
+          },
+          "coverage_metadata": {
+            "type": "object"
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "declarative_only": {
+            "const": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "execution_authorization": {
+      "const": "NONE"
+    },
+    "physical_execution_authorization": {
+      "const": "NONE"
+    },
+    "actionable": {
+      "const": false
+    },
+    "route_to_approach_validated": {
+      "const": false
+    }
+  }
+}

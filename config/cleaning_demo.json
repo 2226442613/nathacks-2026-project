@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "geometry_source": "SIMULATION",
+  "measurements_validated": false,
+  "description": "ILLUSTRATIVE ONLY; not measured robot hardware. Never authorizes physical execution.",
+  "body": {
+    "chassis_length_cm": 12.0,
+    "chassis_width_cm": 8.0,
+    "safety_margin_cm": 1.0,
+    "position_uncertainty_cm": 0.5,
+    "reference_point": "GROUND_CENTER",
+    "axes": "FORWARD_LEFT"
+  },
+  "floor_sponge": {
+    "offset_forward_cm": 4.0,
+    "offset_lateral_cm": 0.0,
+    "contact_length_cm": 4.0,
+    "contact_width_cm": 6.0,
+    "installed": true
+  },
+  "floor_nozzle": {
+    "offset_forward_cm": 7.0,
+    "offset_lateral_cm": 0.0,
+    "coverage_length_cm": 8.0,
+    "coverage_width_cm": 8.0,
+    "fixed_orientation_deg": 0.0,
+    "installed": true,
+    "coverage_calibrated": true,
+    "mount_offset_forward_cm": 5.0,
+    "mount_offset_lateral_cm": 0.0,
+    "mount_height_cm": 2.0,
+    "fixed_spray_azimuth_deg": 0.0,
+    "fixed_spray_elevation_deg": -45.0,
+    "footprint_reference": "MEASURED_EFFECTIVE_IMPACT_CENTER; independent of mechanical nozzle position"
+  },
+  "wall_sponge": {
+    "offset_forward_cm": 0.0,
+    "diameter_cm": 8.0,
+    "contact_width_cm": 4.0,
+    "min_contact_height_cm": 5.0,
+    "max_contact_height_cm": 13.0,
+    "lateral_protrusion_cm": 3.0,
+    "required_wall_clearance_cm": 1.0,
+    "contact_compression_cm": 0.2,
+    "installed": true,
+    "side": "RIGHT"
+  },
+  "wall_nozzle": {
+    "mount_offset_forward_cm": 0.0,
+    "mount_offset_lateral_cm": -2.0,
+    "impact_offset_forward_cm": 0.0,
+    "lift_min_cm": 0.0,
+    "lift_max_cm": 15.0,
+    "rotation_min_deg": -45.0,
+    "rotation_max_deg": 45.0,
+    "impact_min_height_cm": 0.0,
+    "impact_max_height_cm": 20.0,
+    "coverage_width_cm": 10.0,
+    "safe_distance_min_cm": 3.0,
+    "safe_distance_max_cm": 12.0,
+    "installed": true,
+    "coverage_calibrated": true,
+    "orientation_convention": "TOWARD_WALL",
+    "mount_height_cm": 2.0
+  },
+  "planning": {
+    "pass_overlap_fraction": 0.1,
+    "lead_in_cm": 1.0,
+    "retreat_cm": 2.0,
+    "max_strokes": 128
+  }
+}

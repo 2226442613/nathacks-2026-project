@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "geometry_source": "PHYSICAL",
+  "measurements_validated": false,
+  "description": "Partial operator physical measurements. Effective contact, spray coverage, rotation sweep and clearances remain UNCONFIGURED; no demo dimensions are substituted.",
+  "body": {
+    "chassis_length_cm": 26.0,
+    "chassis_width_cm": 15.2,
+    "safety_margin_cm": null,
+    "position_uncertainty_cm": null,
+    "reference_point": "GROUND_CENTER",
+    "axes": "FORWARD_LEFT"
+  },
+  "floor_sponge": {
+    "offset_forward_cm": null,
+    "offset_lateral_cm": null,
+    "contact_length_cm": null,
+    "contact_width_cm": null,
+    "installed": null
+  },
+  "floor_nozzle": {
+    "offset_forward_cm": null,
+    "offset_lateral_cm": null,
+    "coverage_length_cm": null,
+    "coverage_width_cm": null,
+    "fixed_orientation_deg": null,
+    "installed": null,
+    "coverage_calibrated": null,
+    "mount_offset_forward_cm": null,
+    "mount_offset_lateral_cm": null,
+    "mount_height_cm": 16.5,
+    "fixed_spray_azimuth_deg": null,
+    "fixed_spray_elevation_deg": null,
+    "footprint_reference": "MEASURED_EFFECTIVE_IMPACT_CENTER; independent of mechanical nozzle position"
+  },
+  "wall_sponge": {
+    "offset_forward_cm": null,
+    "diameter_cm": null,
+    "contact_width_cm": null,
+    "min_contact_height_cm": 5.0,
+    "max_contact_height_cm": null,
+    "lateral_protrusion_cm": 5.0,
+    "required_wall_clearance_cm": null,
+    "contact_compression_cm": null,
+    "installed": true,
+    "side": "LEFT",
+    "measurements": {
+      "dimensions_cm": [8.0, 13.5],
+      "dimension_axes": null,
+      "front_edge_setback_cm": 6.0,
+      "lowest_edge_height_cm": 5.0,
+      "rotation_about_center": true,
+      "rotation_axis": null,
+      "effective_contact_verified": false,
+      "rotation_envelope_verified": false,
+      "source": "Operator physical measurements; static observed pose only, not a calibrated rotating contact patch"
+    }
+  },
+  "wall_nozzle": {
+    "mount_offset_forward_cm": null,
+    "mount_offset_lateral_cm": null,
+    "impact_offset_forward_cm": null,
+    "lift_min_cm": null,
+    "lift_max_cm": null,
+    "rotation_min_deg": null,
+    "rotation_max_deg": null,
+    "impact_min_height_cm": null,
+    "impact_max_height_cm": null,
+    "coverage_width_cm": null,
+    "safe_distance_min_cm": null,
+    "safe_distance_max_cm": null,
+    "installed": null,
+    "coverage_calibrated": null,
+    "orientation_convention": null,
+    "mount_height_cm": null
+  },
+  "planning": {
+    "pass_overlap_fraction": 0.1,
+    "lead_in_cm": 1.0,
+    "retreat_cm": 2.0,
+    "max_strokes": 128
+  },
+  "nozzle_observation": {
+    "mount_location": "NEAR_FRONT_LEFT",
+    "height_cm": 16.5,
+    "landing_ahead_cm": 10.0,
+    "landing_reference": "UNSPECIFIED_POINT_ON_ROBOT",
+    "approximate": true,
+    "wall_mode_mapping_verified": false,
+    "source": "Operator physical observation; not an exact ground-center offset, spray footprint or invariant trajectory"
+  }
+}

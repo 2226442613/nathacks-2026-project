@@ -1,0 +1,421 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hospital-guardian:target-message:1",
+  "title": "Hospital Guardian target observation v1 (no motion authorization)",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "message_type",
+    "record_key",
+    "target_id",
+    "category",
+    "surface",
+    "position_cm",
+    "last_known_position_cm",
+    "units",
+    "coordinate_frame",
+    "localization_status",
+    "detection_state",
+    "active",
+    "actionable",
+    "motion_authorized",
+    "physically_verified",
+    "timestamp",
+    "last_observed_timestamp",
+    "calibration_id",
+    "calibration_version",
+    "camera_registration",
+    "valid_until",
+    "valid_for_seconds"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "message_type": {
+      "const": "TARGET_DETECTION"
+    },
+    "record_key": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "target_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "category": {
+      "enum": [
+        "RED_SPILL",
+        "NON_RED_SPILL",
+        "UNKNOWN"
+      ]
+    },
+    "surface": {
+      "enum": [
+        "FLOOR",
+        "WALL",
+        "BOUNDARY",
+        "UNKNOWN"
+      ]
+    },
+    "units": {
+      "const": "cm"
+    },
+    "position_cm": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "last_known_position_cm": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "coordinate_frame": {
+      "type": "object",
+      "required": [
+        "frame_id",
+        "units",
+        "floor",
+        "wall"
+      ]
+    },
+    "localization_status": {
+      "enum": [
+        "VERIFIED",
+        "UNVERIFIED",
+        "INVALID"
+      ]
+    },
+    "detection_state": {
+      "enum": [
+        "DETECTED",
+        "LOCALIZED_ESTIMATE",
+        "LOCALIZED_VERIFIED",
+        "INACTIVE"
+      ]
+    },
+    "active": {
+      "type": "boolean"
+    },
+    "actionable": {
+      "const": false
+    },
+    "motion_authorized": {
+      "const": false
+    },
+    "physically_verified": {
+      "type": "boolean"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_observed_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "valid_for_seconds": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "calibration_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "calibration_version": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "camera_registration": {
+      "type": "object",
+      "required": [
+        "status",
+        "reason"
+      ]
+    },
+    "geometry_cm": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/geometry"
+        }
+      ]
+    },
+    "last_known_geometry_cm": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/geometry"
+        }
+      ]
+    },
+    "geometry_status": {
+      "enum": [
+        "UNAVAILABLE",
+        "INVALID",
+        "UNVERIFIED",
+        "VERIFIED"
+      ]
+    },
+    "geometry_reason": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "floor_position": {
+      "type": "object",
+      "required": [
+        "x",
+        "y"
+      ],
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "wall_position": {
+      "type": "object",
+      "required": [
+        "x",
+        "h"
+      ],
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "h": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "geometry": {
+      "type": "object",
+      "required": [
+        "bounds",
+        "width_cm",
+        "area_cm2",
+        "contours",
+        "trust_state",
+        "payload_status"
+      ],
+      "properties": {
+        "bounds": {
+          "type": "object"
+        },
+        "width_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "depth_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height_cm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "area_cm2": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "trust_state": {
+          "enum": [
+            "UNVERIFIED",
+            "VERIFIED"
+          ]
+        },
+        "contour": {
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "contours": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "points"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "outer",
+                  "hole"
+                ]
+              },
+              "points": {
+                "type": "array",
+                "minItems": 3,
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "payload_status": {
+          "enum": [
+            "COMPLETE",
+            "CONTOURS_OMITTED_LIMIT"
+          ]
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "surface": {
+            "const": "FLOOR"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "position_cm": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/$defs/floor_position"
+              }
+            ]
+          },
+          "last_known_position_cm": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/$defs/floor_position"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "surface": {
+            "const": "WALL"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "position_cm": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/$defs/wall_position"
+              }
+            ]
+          },
+          "last_known_position_cm": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/$defs/wall_position"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "surface": {
+            "enum": [
+              "BOUNDARY",
+              "UNKNOWN"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "position_cm": {
+            "type": "null"
+          },
+          "last_known_position_cm": {
+            "type": "null"
+          },
+          "geometry_cm": {
+            "type": "null"
+          },
+          "last_known_geometry_cm": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "active": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "position_cm": {
+            "type": "null"
+          },
+          "detection_state": {
+            "const": "INACTIVE"
+          },
+          "physically_verified": {
+            "const": false
+          },
+          "geometry_cm": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}

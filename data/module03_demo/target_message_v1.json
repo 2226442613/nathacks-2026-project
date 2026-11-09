@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "message_type": "TARGET_DETECTION",
+  "record_key": "29b74e1737754fa880f1f739514a4f62:0:3",
+  "target_id": 3,
+  "category": "NON_RED_SPILL",
+  "surface": "WALL",
+  "position_cm": {
+    "x": 73.92857142857143,
+    "h": 32.99999999999999
+  },
+  "last_known_position_cm": {
+    "x": 73.92857142857143,
+    "h": 32.99999999999999
+  },
+  "units": "cm",
+  "coordinate_frame": {
+    "frame_id": "sha256:daa0888222a5fa8c96131a0fca339016f545f1349364e7d5f3f72e93171f9dba",
+    "units": "cm",
+    "image_coordinates": "current original pixels; calibration anchor mapped once",
+    "floor": {
+      "origin": "Module 01 floor top-left at shared edge",
+      "axes": {
+        "x": "horizontal along shared edge in floor +X direction",
+        "y": "away from wall; shared edge Y=0"
+      },
+      "width_cm": 120.0,
+      "depth_cm": 80.0
+    },
+    "wall": {
+      "origin": "Module 01 wall X=0 at shared base",
+      "axes": {
+        "x": "wall +X",
+        "h": "up from shared base"
+      },
+      "width_cm": 120.0,
+      "height_cm": 60.0
+    },
+    "available_surfaces": [
+      "FLOOR",
+      "WALL"
+    ],
+    "shared_floor_boundary": "top",
+    "wall_x_reversed": false,
+    "wall_origin_in_floor_cm": {
+      "x": 0.0,
+      "y": 0.0
+    },
+    "wall_x_endpoint_in_floor_cm": {
+      "x": 120.0,
+      "y": 0.0
+    }
+  },
+  "localization_status": "UNVERIFIED",
+  "detection_state": "LOCALIZED_ESTIMATE",
+  "active": true,
+  "actionable": false,
+  "motion_authorized": false,
+  "physically_verified": false,
+  "timestamp": "2026-11-08T04:00:01.470176Z",
+  "last_observed_timestamp": "2026-11-08T04:00:01.470176Z",
+  "valid_until": "2026-11-08T04:00:03.470176Z",
+  "valid_for_seconds": 2.0,
+  "first_observed_timestamp": "2026-11-08T04:00:01.470176Z",
+  "calibration_id": "sha256:daa0888222a5fa8c96131a0fca339016f545f1349364e7d5f3f72e93171f9dba",
+  "calibration_version": 2,
+  "camera_registration": {
+    "status": "MATCHED",
+    "current_to_calibration": [
+      [
+        1.0,
+        0.0,
+        1.4897026193699317e-15
+      ],
+      [
+        0.0,
+        1.0,
+        -2.7104449680784557e-15
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "compensated": false,
+    "reason": "Reliable bounded image registration",
+    "max_displacement_pixels": 3.092850759273628e-15,
+    "reference_association": "OPERATOR_DECLARED_CALIBRATION_VIEW",
+    "override_active": false,
+    "reference_id": "sha256:ffc84e27b49c8658724e9a464fdb86fdafb25ef333ae2e841f9ebff2e97056e9"
+  },
+  "visual_detection_usable": true,
+  "quality_warnings": [],
+  "localization_reason": "Mask representative mapped via existing Module 01 API; physical accuracy unverified",
+  "surface_confidence_heuristic": 1.0
+}

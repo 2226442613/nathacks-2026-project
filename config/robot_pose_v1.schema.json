@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hospital-guardian:robot-pose:1",
+  "title": "Hospital Guardian robot observation v1; no motion authorization",
+  "type": "object",
+  "required": ["schema_version", "message_type", "robot_id", "marker_id", "surface", "timestamp", "tracking_status", "localization_status", "position_cm", "heading_deg", "marker_corners_pixels", "marker_center_pixels", "coordinate_frame", "calibration_id", "marker_configuration", "camera_registration", "pose_quality", "last_known_pose", "last_observed_timestamp", "observation_age_seconds", "missed_frames", "actionable", "motion_authorized", "suitable_for_navigation"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "message_type": {"const": "ROBOT_POSE"},
+    "robot_id": {"type": "integer", "minimum": 0},
+    "marker_id": {"type": "integer", "minimum": 0},
+    "surface": {"const": "FLOOR"},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "tracking_status": {"enum": ["VISIBLE", "NOT_SEEN", "LOST", "EXPIRED"]},
+    "localization_status": {"enum": ["VERIFIED", "UNVERIFIED", "UNAVAILABLE", "INVALID"]},
+    "position_cm": {"anyOf": [{"type": "null"}, {"type": "object", "required": ["x", "y"], "properties": {"x": {"type": "number"}, "y": {"type": "number"}}, "additionalProperties": false}]},
+    "heading_deg": {"type": ["number", "null"], "minimum": 0, "exclusiveMaximum": 360},
+    "marker_corners_pixels": {"type": ["array", "null"], "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/pixel"}},
+    "marker_center_pixels": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/pixel"}]},
+    "coordinate_frame": {"type": "object", "required": ["frame_id", "units", "axes", "heading", "reference_point"]},
+    "calibration_id": {"type": ["string", "null"]},
+    "marker_configuration": {"type": "object", "required": ["dictionary", "marker_id", "marker_size_cm", "mounting_height_cm", "marker_offset_forward_cm", "marker_offset_left_cm", "marker_to_robot_heading_deg"]},
+    "camera_registration": {"type": "object"},
+    "pose_quality": {"type": "object", "required": ["reason", "mapping_method", "warnings", "observation_current", "valid_until"]},
+    "last_known_pose": {"type": ["object", "null"]},
+    "last_observed_timestamp": {"type": ["string", "null"]},
+    "observation_age_seconds": {"type": ["number", "null"], "minimum": 0},
+    "missed_frames": {"type": "integer", "minimum": 0},
+    "tracking_event": {"enum": [null, "TRACKING_GAINED", "TRACKING_LOST"]},
+    "actionable": {"const": false},
+    "motion_authorized": {"const": false},
+    "suitable_for_navigation": {"type": "boolean"}
+  },
+  "$defs": {"pixel": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "number"}}},
+  "allOf": [
+    {"if": {"properties": {"suitable_for_navigation": {"const": true}}}, "then": {"properties": {"tracking_status": {"const": "VISIBLE"}, "localization_status": {"const": "VERIFIED"}, "position_cm": {"type": "object"}, "heading_deg": {"type": "number"}}}},
+    {"if": {"properties": {"tracking_status": {"enum": ["NOT_SEEN", "LOST", "EXPIRED"]}}}, "then": {"properties": {"position_cm": {"type": "null"}, "heading_deg": {"type": "null"}, "marker_corners_pixels": {"type": "null"}, "marker_center_pixels": {"type": "null"}}}},
+    {"if": {"properties": {"localization_status": {"enum": ["INVALID", "UNAVAILABLE"]}}}, "then": {"properties": {"position_cm": {"type": "null"}, "heading_deg": {"type": "null"}}}}
+  ]
+}
